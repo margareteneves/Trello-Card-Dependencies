@@ -70,7 +70,7 @@ svg { width: 100%; height: 100%; }
 
 
 /* Card State Styles */
-.blocked { background: #ff1744; }
+.checking { background: #ff1744; }
 .in-progress { background: #ffff00; }
 .backlog { background: #fff; }
 .done { background: #00e676; }

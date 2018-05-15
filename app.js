@@ -1,9 +1,10 @@
 var TrelloInvisDepApp = function(){
 
 	this.baseTrelloUrl = 'https://api.trello.com/1/';
-	this.trelloKey = '&key=30ba6112a9c864cb0ef59ee7f62478d7&token=';
+	this.trelloKey = '&key=3cdc78472ff342a6bf17af374e1da7dd&token=';
 	this.boardShortlink = window.location.search.match(/boardShortLink\=(.+)&/)[1];
 	this.trelloToken = window.location.search.match(/trelloToken\=(.+)/)[1];
+
 	Trello.setToken(this.trelloToken);
 
 	this.board = 'boards/' + this.boardShortlink;
@@ -72,6 +73,7 @@ TrelloInvisDepApp.prototype = function(){
 						case 'dependencyRemoved':
 						{
 							this.updateDataFromTrello();
+							addCardAction();
 						}break;
 					}
 				}
@@ -90,13 +92,26 @@ TrelloInvisDepApp.prototype = function(){
 		}.bind(this));
 	}
 
+	var addCardAction = function(){
+		$('.list-card').each(function(){
+			var teste = getCardDataFromTarget(this);
+
+			$(this).attr("href", "https://trello.com/c/" + teste.shortLink);
+			$(this).attr("target", "_top");
+		});
+	}
+
+	var removeCardAction = function(){
+		$('.list-card').each(function(){
+			$(this).attr("href", "#");
+			$(this).attr("target", "_self");
+		});
+	}
+
 	var init = function()
 	{
-
 		$.when(this.loadDataFromTrello(),this.setupChildCommunication())
 		.done(function(results){
-
-
 			$('.loadingMessage').hide();
 			var cards = results[0];
 			var lists = results[1];
@@ -127,32 +142,33 @@ TrelloInvisDepApp.prototype = function(){
 
 			$('#removeDependencyButton').click(function(){this.removeDependencyClick(this.settings,dataset);}.bind(this));
 			$('#addDependencyButton').click(function(){this.addDependencyClicked(this.settings,dataset);}.bind(this));
-			$('#cancelDependencyButton').click(function(){this.resetDependencyFlow();}.bind(this));
+			$('#cancelDependencyButton').click(function(){this.resetDependencyFlow();addCardAction();}.bind(this));
 
 			$('#removeAllDependencies').click(function(){this.removeAllDependencies(this.settings,dataset);}.bind(this));
 
+			//remove href from card
+			addCardAction();
 
-			}.bind(this));
+		}.bind(this));
 
 
 	};
 
 	var resetDependencyFlow = function (){
-			$('#dependency').text('Add dependency');
+		$('#dependency').text('Add dependency');
 
-			$('#cancelDependencyButton').hide();
+		$('#cancelDependencyButton').hide();
 
-			$('#addDependencyButton').show();
-			$('#removeDependencyButton').show();
+		$('#addDependencyButton').show();
+		$('#removeDependencyButton').show();
 
-			$('#dependency').text('');
-			$('#dependant').text('');
+		$('#dependency').text('');
+		$('#dependant').text('');
 
-			this.dependency = null,this.dependent = null;
-			$(this.settings.svgElement[0]).unbind('mousedown',removeDependencyMouseDown);
-			$(this.settings.svgElement[0]).unbind('mousedown',addDependencyMouseDown);
-
-		};
+		this.dependency = null,this.dependent = null;
+		$(this.settings.svgElement[0]).unbind('mousedown',removeDependencyMouseDown);
+		$(this.settings.svgElement[0]).unbind('mousedown',addDependencyMouseDown);
+	};
 
 	var removeAllDependencies = function(settings,dataset){
 		var dependent = null, dependency = null;
@@ -182,7 +198,6 @@ TrelloInvisDepApp.prototype = function(){
 					me.resetDependencyFlow(true);
 					return;
 				}
-
 				$('#dependant').text('Click on the dependent');
 				return;
 			}
@@ -192,6 +207,7 @@ TrelloInvisDepApp.prototype = function(){
 				var dependent = getCardDataFromTarget(e.target);
 				removeDependency(me.dependency,dependent);
 				me.resetDependencyFlow(true);
+				addCardAction();
 				return;
 			}
 	};
@@ -203,6 +219,8 @@ TrelloInvisDepApp.prototype = function(){
 		$('#cancelDependencyButton').show();
 
 		$('#dependant').text('click on the dependency to remove');
+
+		removeCardAction();
 
 		var dependent = null, dependency = null;
 
@@ -216,24 +234,23 @@ TrelloInvisDepApp.prototype = function(){
 	};
 
 	var addDependencyMouseDown = function dependencyMouseDown(e){
-
 		$('#removeDependencyButton').hide();
 		me = e.data;
 		if(me.dependency == null)
-				{
-					me.dependency = getCardDataFromTarget(e.target);
-					$('#dependency').text(dependency.name);
-					$('#dependant').text('click on the dependent');
-				}
-				else if(me.dependent === null)
-				{
-					me.dependent = getCardDataFromTarget(e.target);
-					$('#dependant').text(me.dependent.name);
+		{
+			me.dependency = getCardDataFromTarget(e.target);
+			$('#dependency').text(dependency.name);
+			$('#dependant').text('click on the dependent');
+		}
+		else if(me.dependent === null)
+		{
+			me.dependent = getCardDataFromTarget(e.target);
+			$('#dependant').text(e.target, me.dependent.name);
 
-					createNewDependency(me.dependency,me.dependent);
-					me.resetDependencyFlow(true);
-					me.dependency = null,me.dependent = null;
-				}
+			createNewDependency(me.dependency,me.dependent);
+			me.resetDependencyFlow(true);
+			me.dependency = null,me.dependent = null;
+		}
 	};
 
 	var addDependencyClicked = function(settings,dataset){
@@ -243,7 +260,7 @@ TrelloInvisDepApp.prototype = function(){
 
 		$('#cancelDependencyButton').show();
 
-
+		removeCardAction();
 
 		$('#dependency').text('click on the dependency');
 		$(settings.svgElement[0]).mousedown(this,this.addDependencyMouseDown);
@@ -309,7 +326,7 @@ TrelloInvisDepApp.prototype = function(){
 				{
 
 					var findCard = function(name){
-						return cardViews.find(".list-card").filter(":has(a:contains('"+name+"'))");
+						return cardViews.find(".list-card").filter(":has(span:contains('"+name+"'))");
 					}
 
 					//Find in parent

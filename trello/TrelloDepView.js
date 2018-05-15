@@ -3,7 +3,7 @@ var TrelloDependencyEngine = function()
 
 	var topMargin = 40;
 	var selPrefix = 'DepView_';
-	var trelloApiKey = '30ba6112a9c864cb0ef59ee7f62478d7';
+	var trelloApiKey = '3cdc78472ff342a6bf17af374e1da7dd';
 	var trelloTokenAvailable = new $.Deferred();
 
 	var injectControls = function(token){
@@ -112,13 +112,13 @@ var TrelloDependencyEngine = function()
 		return $('<a id="'+id+'" class="board-header-btn"><span class="icon-sm board-header-btn-icon"><img src="'+iconUrl+'" width="12" height="12" /></span><span class="text board-header-btn-text">'+content+'</span></a>');
 	};
 	
-
-	
 	var showDependenciesButtonClick = function(){
 		
-		if(Trello.token() === undefined)
+		var token = Trello.token();
+
+		if(token === undefined || token === null)
 		{	
-		Trello.authorize({type: 'popup',
+			Trello.authorize({type: 'popup',
 					  name:'Trello Card Dependency',
 					  persist : true,
 					  scope: {read: true, write : true},
@@ -206,9 +206,10 @@ var TrelloDependencyEngine = function()
 			
 			var cardsHtml = Enumerable.From(cards).Select(function(c){return $('<p></p>').append(prepareCard(c)).html();}).ToArray();
 			
-			var sheets = Enumerable.From($('head').find('[rel="stylesheet"]')).Select(function(e){return $(e).attr('href');}).ToArray()
-			frame[0].contentWindow.postMessage({type: 'css',links : sheets},chrome.extension.getURL(''));
-			frame[0].contentWindow.postMessage({type: 'cards',cards : cardsHtml},chrome.extension.getURL(''));
+			var sheets = Enumerable.From($('head').find('[rel="stylesheet"]')).Select(function(e){return $(e).attr('href');}).ToArray();
+
+			frame[0].contentWindow.postMessage({type: 'css',links : sheets},'*');
+			frame[0].contentWindow.postMessage({type: 'cards',cards : cardsHtml},'*');
 		}
 	};
 	

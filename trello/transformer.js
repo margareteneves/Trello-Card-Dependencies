@@ -10,8 +10,8 @@ TrelloTransformer.prototype = function()
 	var buildDependencyOrientatedDataSet = function(cards,lists){
 		
 		var getCardState = function(listName){
-			if (listName.toLowerCase().indexOf('blocked') === 0) {
-				return 'blocked';
+			if (listName.toLowerCase().indexOf('checking') === 0) {
+				return 'checking';
 			} else if (listName.toLowerCase().indexOf('in progress') === 0) {
 				return 'in-progress';
 			} else if (listName.toLowerCase().indexOf('backlog') != -1) {
