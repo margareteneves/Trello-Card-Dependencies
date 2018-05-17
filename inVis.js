@@ -34,9 +34,10 @@ InVis.prototype = function()
 					.on("zoom", zoomed.bind(this));
 
 		var background = visSettings.svgElement.append("rect")
-											   .attr({width: 1000000,
-													  height:1000000,
-													  fill:'rgb(14, 116, 175)'});
+											   .attr({width: 1000000
+													  , height:1000000
+													  , fill:'rgb(52, 73, 94)'});
+
 		background.call(zoom);
 
 		visSettings.svgElement = visSettings.svgElement.append('g');

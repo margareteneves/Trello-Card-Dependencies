@@ -20,7 +20,7 @@ html { height: 100%; width: 100%; }
 body { height: 100%; width: 100%; overflow: hidden; }
 svg { width: 100%; height: 100%; }
 
-.back { background: rgb(14, 116, 175); }
+.back { background: rgb(52, 73, 94); }
 
 
 /*
@@ -70,11 +70,12 @@ svg { width: 100%; height: 100%; }
 
 
 /* Card State Styles */
-.checking { background: #ff1744; }
-.in-progress { background: #ffff00; }
-.backlog { background: #fff; }
-.done { background: #00e676; }
+.checking { background: #e67e22; }
+.in-progress { background: #2ecc71; }
+.backlog { background: #bdc3c7; }
+.done { background: #3498db; }
 .accepted { background: #00e676; }
+.js-card-name { color: #fff; font-weight: bold; }
 
 
 /* Loading Spinner */
