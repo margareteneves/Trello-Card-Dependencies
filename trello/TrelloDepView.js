@@ -139,15 +139,13 @@ var TrelloDependencyEngine = function()
 				var viewUrl = chrome.extension.getURL("index.html?boardShortLink="+boardUrl+"&trelloToken="+this.trelloToken);
 				
 				this.setupFrame(viewUrl);
-				
-				
 			}
 			else
 			{
 				$('#'+frameId).remove();
 			}
 		
-		}.bind(this));
+		}.bind(this));	
 		
 	};
 	
@@ -235,7 +233,7 @@ var TrelloDependencyEngine = function()
 
 $(function(){
 
-var engine = new TrelloDependencyEngine();		
+	var engine = new TrelloDependencyEngine();	
 
 	engine.setupChildCommunication();
 
