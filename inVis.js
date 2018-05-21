@@ -233,13 +233,24 @@ InVis.prototype = function()
 		this.visSettings.svgElement.selectAll("path")
 								   .data(this.data.edges)
 								   .attr('d',function(d){
+										
 										var x1 = d.source.x;
-										var y1 = d.source.y;
-
 										var x2 = d.target.x;
+
+										var y1 = d.source.y;
 										var y2 = d.target.y;
 
-										var targetVector = {x : x2 - x1, y : y2 - y1};
+										if (!(d.source.nodeType == "Anchor" && d.target.nodeType == "Anchor")){
+											x1 = d.source.x + 113;
+											x2 = d.target.nodeType == "Anchor" ? d.target.x: d.target.x + 113;
+										}
+
+										var targetVector = {
+											xDiff : (x2 - x1), 
+											yDiff : (y2 - y1),
+											x: x2,
+											y: y2
+										};
 
 										return 'M ' + x1 + ' ' + y1 + generatePoints(5,targetVector);
 								   }.bind(this));
@@ -253,9 +264,12 @@ InVis.prototype = function()
 		var inc = 1 / count;
 		for(var i = inc; i <= 1;i += inc)
 		{
-			pathPoints += ' l ' + (targetVector.x * inc ) + ' ' + (targetVector.y * inc );
-		}
+			var pointX = targetVector.x - targetVector.xDiff;
+			var pointY = targetVector.y - targetVector.yDiff;
 
+			pathPoints += ' L ' + (pointX + (targetVector.xDiff * i)) 
+						+ ' ' 	+ (pointY + (targetVector.yDiff * i));
+		}
 		return pathPoints;
 	}
 
