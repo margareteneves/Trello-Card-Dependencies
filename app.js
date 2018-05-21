@@ -207,7 +207,6 @@ TrelloInvisDepApp.prototype = function(){
 				var dependent = getCardDataFromTarget(e.target);
 				removeDependency(me.dependency,dependent);
 				me.resetDependencyFlow(true);
-				addCardAction();
 				return;
 			}
 	};
