@@ -184,7 +184,12 @@ InVis.prototype = function()
 
 			// Possibly move this out of the force loop
 			var anchorNode = Enumerable.From(me.nodes.data())
-									   .Where(function(d){return d.nodeType === 'Anchor'})
+									   .Where(function(d){
+										   if (d == undefined){
+											   return d.nodeType === 'Anchor';
+										   }
+										   return null;
+										})
 									   .SingleOrDefault()
 
 			// if(anchorNode != undefined)
