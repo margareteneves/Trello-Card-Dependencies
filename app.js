@@ -28,7 +28,7 @@ TrelloInvisDepApp.prototype = function(){
 	{
 		var cardApiUrl = this.baseTrelloUrl + this.board +'/cards?fields=name,shortLink,idList,desc' + this.trelloKey + this.trelloToken;
 		var listApiUrl = this.baseTrelloUrl + this.board +'/lists?fields=name,shortLink,idList' + this.trelloKey + this.trelloToken;
-		return $.when($.ajax({url : cardApiUrl}),$.ajax({url : listApiUrl}));
+		return $.when($.ajax({url : cardApiUrl}), $.ajax({url : listApiUrl}));
 	};
 
 	var setupChildCommunication = function()
@@ -72,7 +72,7 @@ TrelloInvisDepApp.prototype = function(){
 						case 'dependencyAdded':
 						case 'dependencyRemoved':
 						{
-							this.updateDataFromTrello();
+							updateDataFromTrello();
 							addCardAction();
 						}break;
 					}
@@ -84,19 +84,17 @@ TrelloInvisDepApp.prototype = function(){
 
 	var updateDataFromTrello = function()
 	{
-		this.loadDataFromTrello().done(function(cardResult,listResult){
-			var cards = cardResult;
-			var lists = listResult;
-			var dataset = new TrelloTransformer().buildDependencyOrientatedDataSet(cards,lists);
+		this.loadDataFromTrello().done(function(cardResult, listResult){
+			var dataset = new TrelloTransformer().buildDependencyOrientatedDataSet(cardResult,listResult);
 			this.invis.updateGraph(this.settings,dataset);
 		}.bind(this));
 	}
 
 	var addCardAction = function(){
 		$('.list-card').each(function(){
-			var teste = getCardDataFromTarget(this);
+			var cardData = getCardDataFromTarget(this);
 
-			$(this).attr("href", "https://trello.com/c/" + teste.shortLink);
+			$(this).attr("href", "https://trello.com/c/" + cardData.shortLink);
 			$(this).attr("target", "_top");
 		});
 	}
@@ -110,7 +108,7 @@ TrelloInvisDepApp.prototype = function(){
 
 	var init = function()
 	{
-		$.when(this.loadDataFromTrello(),this.setupChildCommunication())
+		$.when(this.loadDataFromTrello(), this.setupChildCommunication())
 		.done(function(results){
 			$('.loadingMessage').hide();
 			var cards = results[0];
@@ -377,15 +375,15 @@ TrelloInvisDepApp.prototype = function(){
 
 	return {
 		init:init,
-		loadDataFromTrello:loadDataFromTrello,
-		setupChildCommunication : setupChildCommunication,
-		removeDependencyClick : removeDependencyClick,
-		removeAllDependencies : removeAllDependencies,
-		updateDataFromTrello : updateDataFromTrello,
-		addDependencyMouseDown : addDependencyMouseDown,
-		addDependencyClicked : addDependencyClicked,
+		loadDataFromTrello        : loadDataFromTrello,
+		setupChildCommunication   : setupChildCommunication,
+		removeDependencyClick     : removeDependencyClick,
+		removeAllDependencies     : removeAllDependencies,
+		updateDataFromTrello      : updateDataFromTrello,
+		addDependencyMouseDown    : addDependencyMouseDown,
+		addDependencyClicked      : addDependencyClicked,
 		removeDependencyMouseDown : removeDependencyMouseDown,
-		resetDependencyFlow : resetDependencyFlow
+		resetDependencyFlow       : resetDependencyFlow
 	};
 }();
 

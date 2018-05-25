@@ -108,7 +108,7 @@ InVis.prototype = function()
 			.html(function(d,i){
 				return me.visSettings.nodeSettings.buildNode(d,i);
 			})
-			.attr({width:'226px',
+			.attr({width:'250px',
 				   height:'100%', x: 10, y:10})
 			.call(this.force.drag);
 
@@ -246,8 +246,8 @@ InVis.prototype = function()
 										var y2 = d.target.y;
 
 										if (!(d.source.nodeType == "Anchor" && d.target.nodeType == "Anchor")){
-											x1 = d.source.x + 113;
-											x2 = d.target.nodeType == "Anchor" ? d.target.x: d.target.x + 113;
+											x1 = d.source.x + 125;
+											x2 = d.target.nodeType == "Anchor" ? d.target.x: d.target.x + 125;
 										}
 
 										var targetVector = {
