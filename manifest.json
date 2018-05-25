@@ -3,7 +3,7 @@
 
   "name": "Trello Card Dependencies",
   "description": "Allows you to add and visualise dependencies on cards",
-  "version": "1.6",
+  "version": "1.7",
 
   "permissions": [
 	"http://trello.com/b*",
